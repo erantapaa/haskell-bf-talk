@@ -1,3 +1,3 @@
 
-Code and notes for a talk on writing BrainF\*ck programs with Haskell.
+Code and notes for a talk on a Haskell DSL for writing BrainF\*ck programs.
 

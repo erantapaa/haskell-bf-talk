@@ -42,3 +42,14 @@ ifZero' x body t = do
   ifNonZero' x (clear t)
   dotimes' t body
 
+-- destructive if-then-else using temporaries
+ifThenElse' x thenClause elseClause t1 t2 = do
+  clear t1
+  assign t2 1
+  ifNonZero' x (do incr t1; clear t2)
+  ifNonZero' t1 thenClause
+  ifNonZero' t2 elseClause
+
+-- main problem with this if-then-else is that
+-- it is destructive and inefficient.
+

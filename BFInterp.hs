@@ -1,5 +1,5 @@
 module BFInterp (
-  runBF, runBFWithInput
+  runBF, runBFWithInput, runBFFileWithInput
 )
 
 where
@@ -19,6 +19,11 @@ runBFWithInput input code =
     hPutStr h code
     hFlush h
     callProcess bfProgramPath [path, input]
+
+runBFFileWithInput :: String -> String -> IO ()
+runBFFileWithInput path input = do
+  code <- readFile path
+  runBFWithInput input code
 
 test1 = runBF code
   where code = (replicate 34 '+') ++ "."

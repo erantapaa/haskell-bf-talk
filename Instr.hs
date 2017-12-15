@@ -9,7 +9,7 @@ module Instr (
 import BFOps  -- defines Instr(..), simplify, toOpcodes
 import Control.Monad.Writer.Strict
 import Data.DList hiding (replicate)
-import Memory
+import Address
 
 -- define monadic versions of the basic instructions
 moverel n = tell (singleton (Move n))

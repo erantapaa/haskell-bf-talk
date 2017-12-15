@@ -5,7 +5,7 @@ module Step6 where
 
 import BFOps  -- defines Instr(..), simplify, toOpcodes
 
-import Memory  -- R
+import Address -- R
 import Instr   -- move, moveb, inc, ..., debug
 import Allocator (compile, alloc, nalloc)
 
@@ -99,7 +99,7 @@ ifThenElse x zero thenClause elseClause = do
 data Pair = Pair Int
   deriving (Read, Show, Eq)
 
-instance Memory Pair where
+instance Address Pair where
   addr (Pair x) = x
 
 instance Translatable Pair where

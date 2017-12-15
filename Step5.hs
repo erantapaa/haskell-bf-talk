@@ -9,7 +9,7 @@ import Control.Monad.Writer.Strict
 import Control.Monad.State.Strict
 import Data.DList hiding (replicate)
 
-import Memory
+import Address
 import Instr   -- move, moveb, inc, ..., debug
 
 data AllocState = AllocState { freeptr :: !Int, max_freeptr :: !Int }

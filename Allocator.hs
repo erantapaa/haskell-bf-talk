@@ -11,7 +11,7 @@ import Control.Monad.Writer.Strict
 import Control.Monad.State.Strict
 import Data.DList hiding (replicate)
 
-import Memory
+import Address 
 import Instr   -- move, moveb, inc, ..., debug
 
 data AllocState = AllocState { freeptr :: !Int, max_freeptr :: !Int }
@@ -26,7 +26,7 @@ compile program =
   toOpcodes $ simplify $ toList $ execWriter (execStateT program initialAllocState)
 
 -- allocate n memory cells and pass location to body
-nalloc :: Int -> (Int -> BF a) -> BF a
+-- nalloc :: Int -> (Int -> BF a) -> BF a
 nalloc n body = do
   st <- get
   let x = freeptr st

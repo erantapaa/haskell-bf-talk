@@ -1,7 +1,7 @@
 {-# LANGUAGE NoMonomorphismRestriction, FlexibleContexts #-}
 
 module Instr (
-  move, moveb, inc, readch, printch, open, close, debug,
+  moverel, move, moveb, inc, readch, printch, open, close, debug,
   at, clear, incr_by, decr_by, dotimes', assign, while, 
   incr, decr, getch, putch
 ) where
@@ -12,8 +12,9 @@ import Data.DList hiding (replicate)
 import Memory
 
 -- define monadic versions of the basic instructions
-move x    = tell (singleton (Move (addr x)))
-moveb x   = tell (singleton (Move (-(addr x))))
+moverel n = tell (singleton (Move n))
+move x    = moverel (addr x)
+moveb x   = moverel (-(addr x))
 
 -- unchanged:
 inc a     = tell (singleton (Inc a))

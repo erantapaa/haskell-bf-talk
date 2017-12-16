@@ -1,16 +1,15 @@
 {-# LANGUAGE NoMonomorphismRestriction, FlexibleContexts #-}
 
--- implicit zero pair, ReaderT layer
-
-module Step7 (
-  ifThenElse', ifThenElse, divide, withZero
+module Util (
+  withZero,
+  ifThenElse, ifThenElse', divide, pass, copy'', isGE,
+  printNibble', printHexByte', printNL
 ) where
 
 import Instr   -- move, moveb, inc, ..., debug
 import Allocator (compile, alloc, nalloc)
 import Pair
 import Translatable
-
 import Control.Monad.Reader
 
 withZero zero body = runReaderT body zero
@@ -52,15 +51,49 @@ divide x r q = do
       (do dotimes' r' (incr r)
           incr q)
 
-test_divide a b = do
-  allocPair $ \zero -> do
-  withZero zero $ do
-    allocPair $ \x    -> do
-    allocPair $ \r    -> do
-    alloc     $ \q    -> do
-    assign x a        -- note: x and r are Pairs!
-    assign r b
-    divide x r q
-    debug q "quotient"
-    debug (translate 1 r) "remainder"
+pass = return()
+
+-- destructive copy
+copy'' x y = do
+  clear y
+  dotimes' x (incr y)
+
+-- set r to 1 if px >= c
+isGE c px result = do
+  alloc $ \t -> do
+  alloc $ \s -> do
+  assign result 1
+  assign t c
+  while t $ do
+    ifThenElse px
+      pass
+      (do clear result; clear t)
+    decr px
+    decr t
+    incr s
+  dotimes' s (incr px)
+
+printNibble' px = do
+  alloc $ \r -> do
+  isGE 10 px r
+  incr_by px 48
+  dotimes' r $ incr_by px 7
+  putch px
+
+printHexByte' px = do
+  allocPair $ \pq -> do
+  allocPair $ \pr -> do
+  let pr' = second pr
+  assign pr 16
+  clear pr'
+  clear pq
+  divide px pr pq
+  printNibble' pq
+  copy'' pr' pq
+  printNibble' pq
+
+printNL = do
+  alloc $ \t -> do
+  assign t 10
+  putch t
 

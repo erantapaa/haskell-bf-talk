@@ -1,6 +1,8 @@
 {-# LANGUAGE NoMonomorphismRestriction, FlexibleContexts #-}
 {-# LANGUAGE BangPatterns #-}
 
+-- Allocator
+
 module Step5 where
 
 import BFOps  -- defines Instr(..), simplify, toOpcodes

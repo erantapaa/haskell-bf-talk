@@ -1,5 +1,7 @@
 {-# LANGUAGE NoMonomorphismRestriction, FlexibleContexts #-}
 
+-- Frames, printDecimal
+
 module Step8 where
 
 import Address

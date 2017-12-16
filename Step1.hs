@@ -1,5 +1,7 @@
 module Step1 where
 
+-- opcode definitions, compilation, peep-hold optimization
+
 data Instr = Move Int | Inc Int | Read | Print | Open | Close | Debug String
                 deriving (Read, Show, Eq)
 
@@ -67,6 +69,6 @@ ex2 = incr_by 0 10
       ++ at 1 [ Debug "" ]
 
 -- :add BFInterp
--- :m +Step1
+-- :m *Step1 *BFInterp
 -- runBF $ compile ex1
 

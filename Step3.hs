@@ -1,5 +1,7 @@
 {-# LANGUAGE NoMonomorphismRestriction, FlexibleContexts #-}
 
+-- more type safety via the R data type
+
 module Step3 (
   Instr(..), simplify, toOpcodes,
   BF, compile, R(..),

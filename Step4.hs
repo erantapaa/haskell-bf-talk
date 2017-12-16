@@ -1,10 +1,10 @@
 {-# LANGUAGE NoMonomorphismRestriction, FlexibleContexts #-}
 
+-- Some BF coding techniques
+
 module Step4 where
 
 import Step3
-
--- Some BF coding techniques
 
 assign x a = do
   clear x

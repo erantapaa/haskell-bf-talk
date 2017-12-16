@@ -1,6 +1,8 @@
 {-# LANGUAGE NoMonomorphismRestriction, FlexibleContexts #-}
 {-# LANGUAGE BangPatterns #-}
 
+-- ifThenElse, divide
+
 module Step6 where
 
 import BFOps  -- defines Instr(..), simplify, toOpcodes
@@ -21,13 +23,13 @@ instance Translatable R where
 -- zero and zero+1 both must contain zero
 ifThenElse' x zero thenClause elseClause = do
   at x open
-  elseClause
+  thenClause
   move zero
   close
   moverel 1
   open
   moveb (translate 1 x)
-  thenClause
+  elseClause
   at (translate 1 zero) close
 
 {-
@@ -37,13 +39,13 @@ ifThenElse' x zero thenClause elseClause = do
     move x            x           x
     open              x           .
       moveb x         0           .
-      elseClause      0           .
+      thenClause      0           .
       move z          z           .
     close             z           .   
     moverel 1        z+1         x+1
     open             z+1         x+1 **
       moveb (x+1)     .           0
-      thenClause      .           0
+      elseClause      .           0
       move  (z+1)     .          z+1        
     close             .          z+1
     moveb (z+1)       0           0
@@ -69,9 +71,9 @@ divide x r q zero = do
     decr r
     incr r'
     ifThenElse' r zero
+      (return ())
       (do dotimes' r' (incr r)
           incr q)
-      (return ())
 
 
 -- divide a by b

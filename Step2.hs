@@ -1,5 +1,7 @@
 {-# LANGUAGE NoMonomorphismRestriction, FlexibleContexts #-}
 
+-- using the Writer monad, do-notation
+
 module Step2 where
 
 import BFOps  -- defines Instr(..), simplify, toOpcodes

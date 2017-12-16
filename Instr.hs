@@ -1,7 +1,7 @@
 {-# LANGUAGE NoMonomorphismRestriction, FlexibleContexts #-}
 
 module Instr (
-  moverel, move, moveb, inc, readch, printch, open, close, debug,
+  moverel, move, moveb, inc, readch, printch, open, close, debug, debug_,
   at, clear, incr_by, decr_by, dotimes', assign, while, 
   incr, decr, getch, putch
 ) where

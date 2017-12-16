@@ -3,14 +3,17 @@
 module Util (
   withZero,
   ifThenElse, ifThenElse', divide, pass, copy'', isGE,
-  printNibble', printHexByte', printNL
+  printNibble', printHexByte', printNL, printDecimal
 ) where
 
 import Instr   -- move, moveb, inc, ..., debug
+import Address
 import Allocator (compile, alloc, nalloc)
 import Pair
 import Translatable
 import Control.Monad.Reader
+
+clearPair pair = do clear pair; clear (second pair)
 
 withZero zero body = runReaderT body zero
 
@@ -97,3 +100,41 @@ printNL = do
   assign t 10
   putch t
 
+printDecimal a work = do
+  -- a    = address of value to print
+  -- work = address of work space to use
+
+  -- frame offsets:
+  let zero    = Pair 0  -- a pair of zeros
+      isdigit = R 2     -- == 1 if frame contains a digit
+      x       = R 3     -- current value
+      r       = Pair 4  -- remainder pair
+      r'      = second r
+      frameSize = 6
+
+      advance = moverel frameSize
+      backup  = moverel (-frameSize)
+      next v  = translate frameSize v
+
+  -- copy the input value to field x of frame 1
+  let x1 = next (translate (addr work) x)
+  clear x1
+  dotimes' a (incr x1)   -- destructive copy of a
+
+  at work $ do
+    -- now all addresses are relative to work
+    clearPair zero
+    withZero zero $ do
+      clear isdigit      -- clear isdigit of frame 0
+      advance
+      while x $ do
+        assign isdigit 1
+        assign r 10
+        clear r'
+        divide x r (next x)
+        advance
+      backup
+      while isdigit $ do
+        incr_by r' 48
+        putch r'
+        backup

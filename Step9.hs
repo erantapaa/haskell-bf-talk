@@ -8,7 +8,6 @@ module Step9 where
 import Instr    -- move, moveb, inc, ..., debug
 import Allocator (compile, alloc, nalloc)
 import Pair
--- import Translatable
 import Util
 
 clearPair pair = do clear pair; clear (second pair)

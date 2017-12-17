@@ -1,6 +1,6 @@
 module Step1 where
 
--- opcode definitions, compilation, peep-hold optimization
+-- opcode definitions, compilation, peep-hole optimization
 
 data Instr = Move Int | Inc Int | Read | Print | Open | Close | Debug String
                 deriving (Read, Show, Eq)

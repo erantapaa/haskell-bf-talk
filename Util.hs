@@ -1,6 +1,7 @@
 {-# LANGUAGE NoMonomorphismRestriction, FlexibleContexts #-}
 
 module Util (
+  copy,
   withZero,
   ifThenElse, ifThenElse', divide, pass, copy'', isGE,
   printNibble', printHexByte', printNL, printDecimal
@@ -12,6 +13,13 @@ import Allocator (compile, alloc, nalloc)
 import Pair
 import Translatable
 import Control.Monad.Reader
+
+-- non-destructive copy
+copy x y = do
+  alloc $ \t -> do
+  clear y
+  dotimes' x $ do incr y; incr t
+  dotimes' t (incr x)
 
 clearPair pair = do clear pair; clear (second pair)
 

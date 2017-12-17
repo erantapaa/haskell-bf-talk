@@ -1,7 +1,8 @@
-#!/usr/local/bin/node
+#!/usr/bin/env nodejs
 
-// Usage: node bf 
-// BF interpreter
+// BF interpreter with memory dump
+
+// Usage: nodejs bf-interp-dump program-path input memory-size
 
 'use strict';
 

@@ -2,15 +2,26 @@
 
 -- Arrays
 
-module Step11 where
+module Array (
+  withFrameContext,
+  advance, backup, next, prev,
+  advanceToTarget, rewindTo0,
+  setupBreadCrumbs,
+  eraseCrumbsFrom0, eraseCrumbsFromTarget,
+  toFrameContext,
+  arrayIndex, arrayValue,
+  arrayCrumbOffset, arrayIndexOffset, arrayValueOffset,
+  arrayPut, arrayGet, arrayIncr, arrayDecr
+) where
 
 import Instr    -- move, moveb, inc, ..., debug
 import Address
+import Translatable
 import Allocator (compile, alloc, nalloc)
 import Translatable
 import Control.Monad.Reader
 import Pair
-import Util (copy'', printDecimal, withZero)
+import Util (copy, printDecimal, withZero)
 
 data FrameContext = FrameContext { frameSize_ :: Int }
   deriving (Read, Show)
@@ -133,12 +144,17 @@ arrayIncr arr dest = do
       -- clean up the crumbs
       eraseCrumbsFrom0
 
--- non-destructive copy
-copy x y = do
-  alloc $ \t -> do
-  clear y
-  dotimes' x $ do incr y; incr t
-  dotimes' t (incr x)
+-- decrement the target cell by `arrayValue arr`
+arrayDecr arr dest = do
+  at arr $ do
+    withFrameContext (toFrameContext arr) $ do
+      setupBreadCrumbs arrayIndexOffset arrayCrumbOffset
+      dotimes' arrayValueOffset $ do
+        advanceToTarget
+        decr dest
+        rewindTo0
+      -- clean up the crumbs
+      eraseCrumbsFrom0
 
 -- read from stdin and report the number of
 -- times each character appears
